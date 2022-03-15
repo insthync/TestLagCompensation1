@@ -7,9 +7,12 @@ using UnityEngine.UI;
 public class PlayerShooter : LiteNetLibBehaviour
 {
     public Text textHit;
+    public Text textRtt;
     public Material matHistory;
+    public Material matPresent;
     public Material matHit;
     private GameObject historyObj;
+    private GameObject presentObj;
     private GameObject hitObj;
 
     void Update()
@@ -25,27 +28,48 @@ public class PlayerShooter : LiteNetLibBehaviour
             }
             RPC(RpcRaycast, ray.origin, ray.direction);
         }
+        textRtt.text = IsClient ? Manager.Rtt.ToString() : (Manager.GetPlayer(ConnectionId).Rtt + " " + Manager.ServerTransport.GetRtt(ConnectionId));
     }
-    
+
     [ServerRpc]
     private void RpcRaycast(Vector3 origin, Vector3 direction)
     {
+        InstantiatePresent();
         LagCompensationManager.Instance.BeginSimlateHitBoxesByRtt(ConnectionId);
         InstantiateHistory();
         RaycastHit hit;
         if (Physics.Raycast(origin, direction, out hit))
         {
-            textHit.text = (IsClient ? Manager.Rtt : Manager.GetPlayer(ConnectionId).Rtt) + " " + hit.transform.ToString();
+            textHit.text = hit.transform.ToString();
             InstantiateHit(hit);
         }
         LagCompensationManager.Instance.EndSimulateHitBoxes();
+    }
+
+    void InstantiatePresent()
+    {
+        if (presentObj != null)
+            Destroy(presentObj);
+        var obj = Instantiate(MovingObject.Instance.transform, MovingObject.Instance.transform.position + Vector3.back * 0.1f, MovingObject.Instance.transform.rotation);
+        var renderers = obj.GetComponentsInChildren<Renderer>();
+        foreach (var renderer in renderers)
+        {
+            renderer.material = matPresent;
+        }
+        obj.GetComponent<MovingObject>().enabled = false;
+        var colliders = obj.GetComponentsInChildren<Collider>();
+        foreach (var collider in colliders)
+        {
+            collider.enabled = false;
+        }
+        presentObj = obj.gameObject;
     }
 
     void InstantiateHistory()
     {
         if (historyObj != null)
             Destroy(historyObj);
-        var obj = Instantiate(MovingObject.Instance.transform, MovingObject.Instance.transform.position, MovingObject.Instance.transform.rotation);
+        var obj = Instantiate(MovingObject.Instance.transform, MovingObject.Instance.transform.position + Vector3.back * 0.2f, MovingObject.Instance.transform.rotation);
         var renderers = obj.GetComponentsInChildren<Renderer>();
         foreach (var renderer in renderers)
         {
@@ -64,7 +88,7 @@ public class PlayerShooter : LiteNetLibBehaviour
     {
         if (hitObj != null)
             Destroy(hitObj);
-        var obj = Instantiate(hit.transform.gameObject, hit.transform.position, hit.transform.rotation);
+        var obj = Instantiate(hit.transform.gameObject, hit.transform.position + Vector3.forward * 0.1f, hit.transform.rotation);
         var renderer = obj.GetComponent<Renderer>();
         renderer.material = matHit;
         var colliders = obj.GetComponentsInChildren<Collider>();

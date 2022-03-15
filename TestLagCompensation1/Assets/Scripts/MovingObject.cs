@@ -26,6 +26,7 @@ public class MovingObject : LiteNetLibBehaviour
         {
             hitBoxes[i].Setup(i);
         }
+        LagCompensationManager.Instance.AddHitBoxes(ObjectId, hitBoxes);
     }
 
     private void Update()

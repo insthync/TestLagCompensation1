@@ -22,11 +22,18 @@ public class PlayerShooter : LiteNetLibBehaviour
         {
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
+            if (hitObj != null)
+                Destroy(hitObj);
             if (Physics.Raycast(ray, out hit))
             {
-                textHit.text = hit.transform.ToString();
+                textHit.text = hit.transform.root.ToString();
                 InstantiateHit(hit);
             }
+            lineRenderer.SetPositions(new Vector3[]
+            {
+                ray.origin,
+                ray.origin + ray.direction * 100f,
+            });
             RPC(RpcRaycast, ray.origin, ray.direction);
         }
         textRtt.text = IsClient ? Manager.Rtt.ToString() : Manager.GetPlayer(ConnectionId).Rtt.ToString();
@@ -35,18 +42,20 @@ public class PlayerShooter : LiteNetLibBehaviour
     [ServerRpc]
     private void RpcRaycast(Vector3 origin, Vector3 direction)
     {
+        if (hitObj != null)
+            Destroy(hitObj);
         InstantiatePresent();
         LagCompensationManager.Instance.BeginSimlateHitBoxesByRtt(ConnectionId);
         InstantiateHistory();
         RaycastHit hit;
         if (Physics.Raycast(origin, direction, out hit))
         {
-            textHit.text = hit.transform.ToString();
+            textHit.text = hit.transform.root.ToString();
             InstantiateHit(hit);
         }
         lineRenderer.SetPositions(new Vector3[]
         {
-            origin + direction * 2.5f,
+            origin,
             origin + direction * 100f,
         });
         LagCompensationManager.Instance.EndSimulateHitBoxes();
@@ -68,6 +77,7 @@ public class PlayerShooter : LiteNetLibBehaviour
         {
             collider.enabled = false;
         }
+        obj.name += "(Present)";
         presentObj = obj.gameObject;
     }
 
@@ -87,6 +97,7 @@ public class PlayerShooter : LiteNetLibBehaviour
         {
             collider.enabled = false;
         }
+        obj.name += "(Rewinded)";
         historyObj = obj.gameObject;
     }
 
@@ -102,6 +113,7 @@ public class PlayerShooter : LiteNetLibBehaviour
         {
             collider.enabled = false;
         }
+        obj.name += "(Hit)";
         hitObj = obj.gameObject;
     }
 }

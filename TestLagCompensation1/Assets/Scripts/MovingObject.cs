@@ -29,7 +29,7 @@ public class MovingObject : LiteNetLibBehaviour
         LagCompensationManager.Instance.AddHitBoxes(ObjectId, hitBoxes);
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (moveLeft)
         {

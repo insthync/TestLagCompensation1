@@ -43,14 +43,19 @@ public class PlayerShooter : LiteNetLibBehaviour
 
     void InstantiateHistory()
     {
-        var hitBox = FindObjectOfType<HitBox>();
         if (historyObj != null)
             Destroy(historyObj);
-        var obj = Instantiate(hitBox.transform.root, hitBox.transform.root.position, hitBox.transform.root.rotation);
+        var obj = Instantiate(MovingObject.Instance.transform, MovingObject.Instance.transform.position, MovingObject.Instance.transform.rotation);
         var renderers = obj.GetComponentsInChildren<Renderer>();
         foreach (var renderer in renderers)
         {
             renderer.material = matHistory;
+        }
+        obj.GetComponent<MovingObject>().enabled = false;
+        var colliders = obj.GetComponentsInChildren<Collider>();
+        foreach (var collider in colliders)
+        {
+            collider.enabled = false;
         }
         historyObj = obj.gameObject;
     }
@@ -62,6 +67,12 @@ public class PlayerShooter : LiteNetLibBehaviour
         var obj = Instantiate(hit.transform.gameObject, hit.transform.position, hit.transform.rotation);
         var renderer = obj.GetComponent<Renderer>();
         renderer.material = matHit;
+        obj.GetComponent<MovingObject>().enabled = false;
+        var colliders = obj.GetComponentsInChildren<Collider>();
+        foreach (var collider in colliders)
+        {
+            collider.enabled = false;
+        }
         hitObj = obj.gameObject;
     }
 }

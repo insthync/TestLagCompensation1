@@ -10,7 +10,16 @@ public class MovingObject : LiteNetLibBehaviour
     private HitBox[] hitBoxes;
     private bool moveLeft;
 
-    void Start()
+    public static MovingObject Instance { get; private set; }
+
+    private void Awake()
+    {
+        if (Instance != null)
+            return;
+        Instance = this;
+    }
+
+    private void Start()
     {
         hitBoxes = GetComponentsInChildren<HitBox>();
         for (int i = 0; i < hitBoxes.Length; i++)

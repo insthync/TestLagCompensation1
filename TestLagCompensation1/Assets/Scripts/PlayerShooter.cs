@@ -11,11 +11,12 @@ public class PlayerShooter : LiteNetLibBehaviour
     public Material matHistory;
     public Material matPresent;
     public Material matHit;
+    public LineRenderer lineRenderer;
     private GameObject historyObj;
     private GameObject presentObj;
     private GameObject hitObj;
 
-    void Update()
+    private void Update()
     {
         if (IsClient && Input.GetMouseButtonDown(0))
         {
@@ -28,7 +29,7 @@ public class PlayerShooter : LiteNetLibBehaviour
             }
             RPC(RpcRaycast, ray.origin, ray.direction);
         }
-        textRtt.text = IsClient ? Manager.Rtt.ToString() : (Manager.GetPlayer(ConnectionId).Rtt + " " + Manager.ServerTransport.GetRtt(ConnectionId));
+        textRtt.text = IsClient ? Manager.Rtt.ToString() : Manager.GetPlayer(ConnectionId).Rtt.ToString();
     }
 
     [ServerRpc]
@@ -43,6 +44,11 @@ public class PlayerShooter : LiteNetLibBehaviour
             textHit.text = hit.transform.ToString();
             InstantiateHit(hit);
         }
+        lineRenderer.SetPositions(new Vector3[]
+        {
+            origin + direction * 2.5f,
+            origin + direction * 100f,
+        });
         LagCompensationManager.Instance.EndSimulateHitBoxes();
     }
 

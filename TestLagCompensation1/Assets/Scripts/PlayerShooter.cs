@@ -35,7 +35,7 @@ public class PlayerShooter : LiteNetLibBehaviour
         RaycastHit hit;
         if (Physics.Raycast(origin, direction, out hit))
         {
-            textHit.text = hit.transform.ToString();
+            textHit.text = (IsClient ? Manager.Rtt : Manager.GetPlayer(ConnectionId).Rtt) + " " + hit.transform.ToString();
             InstantiateHit(hit);
         }
         LagCompensationManager.Instance.EndSimulateHitBoxes();

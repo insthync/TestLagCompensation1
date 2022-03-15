@@ -4,13 +4,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DefaultLagCompensationManager : MonoBehaviour
+public class LagCompensationManager : MonoBehaviour
 {
     private readonly Dictionary<uint, HitBox[]> HitBoxes = new Dictionary<uint, HitBox[]>();
     public float snapShotInterval = 0.06f;
     public int maxHistorySize = 16;
     public int MaxHistorySize { get { return maxHistorySize; } }
-    public static DefaultLagCompensationManager Instance { get; private set; }
+    public static LagCompensationManager Instance { get; private set; }
     private readonly List<HitBox> hitBoxes = new List<HitBox>();
     private float snapShotCountDown = 0f;
 

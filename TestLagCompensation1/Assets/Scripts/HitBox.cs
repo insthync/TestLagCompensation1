@@ -145,7 +145,7 @@ public class HitBox : MonoBehaviour
 
     public void AddTransformHistory(long time)
     {
-        if (histories.Count == DefaultLagCompensationManager.Instance.MaxHistorySize)
+        if (histories.Count == LagCompensationManager.Instance.MaxHistorySize)
             histories.RemoveAt(0);
         histories.Add(new TransformHistory()
         {

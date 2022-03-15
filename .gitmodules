@@ -1,0 +1,3 @@
+[submodule "TestLagCompensation1/Assets/LiteNetLibManager"]
+	path = TestLagCompensation1/Assets/LiteNetLibManager
+	url = https://github.com/insthync/LiteNetLibManager.git

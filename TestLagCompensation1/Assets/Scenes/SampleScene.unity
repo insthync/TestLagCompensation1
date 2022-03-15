@@ -340,7 +340,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6b473e45d47b204aac1d00c6c377d74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  snapShotInterval: 0.06
+  snapShotInterval: 0.1
   maxHistorySize: 16
 --- !u!1 &963194225
 GameObject:

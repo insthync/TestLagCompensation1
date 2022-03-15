@@ -67,7 +67,6 @@ public class PlayerShooter : LiteNetLibBehaviour
         var obj = Instantiate(hit.transform.gameObject, hit.transform.position, hit.transform.rotation);
         var renderer = obj.GetComponent<Renderer>();
         renderer.material = matHit;
-        obj.GetComponent<MovingObject>().enabled = false;
         var colliders = obj.GetComponentsInChildren<Collider>();
         foreach (var collider in colliders)
         {

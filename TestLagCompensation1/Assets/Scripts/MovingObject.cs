@@ -30,8 +30,6 @@ public class MovingObject : LiteNetLibBehaviour
 
     private void Update()
     {
-        if (!IsServer)
-            return;
         if (moveLeft)
         {
             transform.position += Vector3.left * Time.deltaTime * moveSpeed;
@@ -44,7 +42,8 @@ public class MovingObject : LiteNetLibBehaviour
             if (transform.position.x > bounds)
                 moveLeft = true;
         }
-        RPC(RpcUpdatePosition, transform.position);
+        if (IsServer)
+            RPC(RpcUpdatePosition, transform.position);
     }
 
     [AllRpc]

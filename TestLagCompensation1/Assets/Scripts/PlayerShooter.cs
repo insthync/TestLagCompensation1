@@ -65,7 +65,9 @@ public class PlayerShooter : LiteNetLibBehaviour
     {
         if (presentObj != null)
             Destroy(presentObj);
-        var obj = Instantiate(MovingObject.Instance.transform, MovingObject.Instance.transform.position + Vector3.back * 0.1f, MovingObject.Instance.transform.rotation);
+        var obj = Instantiate(MovingObject.Instance.transform);
+        obj.position = MovingObject.Instance.transform.position + Vector3.back * 0.1f;
+        obj.rotation = MovingObject.Instance.transform.rotation;
         var renderers = obj.GetComponentsInChildren<Renderer>();
         foreach (var renderer in renderers)
         {
@@ -85,7 +87,9 @@ public class PlayerShooter : LiteNetLibBehaviour
     {
         if (historyObj != null)
             Destroy(historyObj);
-        var obj = Instantiate(MovingObject.Instance.transform, MovingObject.Instance.transform.position + Vector3.back * 0.2f, MovingObject.Instance.transform.rotation);
+        var obj = Instantiate(MovingObject.Instance.transform);
+        obj.position = MovingObject.Instance.transform.position + Vector3.back * 0.2f;
+        obj.rotation = MovingObject.Instance.transform.rotation;
         var renderers = obj.GetComponentsInChildren<Renderer>();
         foreach (var renderer in renderers)
         {
@@ -105,7 +109,9 @@ public class PlayerShooter : LiteNetLibBehaviour
     {
         if (hitObj != null)
             Destroy(hitObj);
-        var obj = Instantiate(hit.transform.gameObject, hit.transform.position + Vector3.forward * 0.1f, hit.transform.rotation);
+        var obj = Instantiate(hit.transform);
+        obj.position = hit.transform.position + Vector3.forward * 0.1f;
+        obj.rotation = hit.transform.rotation;
         var renderer = obj.GetComponent<Renderer>();
         renderer.material = matHit;
         var colliders = obj.GetComponentsInChildren<Collider>();
